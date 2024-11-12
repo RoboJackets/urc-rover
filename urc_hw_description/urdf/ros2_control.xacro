@@ -149,7 +149,7 @@
       <ros2_control name="rover_drivetrain" type="system">
         <hardware>
           <plugin>urc_hw/RoverDrivetrain</plugin>
-          <param name="udp_address">192.168.1.113</param>
+          <param name="udp_address">192.168.1.61</param>
           <param name="udp_port">8443</param>
         </hardware>
         <joint name="left_wheel">
@@ -170,7 +170,7 @@
       <ros2_control name="status_light" type="system">
         <hardware>
           <plugin>urc_hw/StatusLight</plugin>
-          <param name="udp_address">192.168.1.113</param>
+          <param name="udp_address">192.168.1.61</param>
           <param name="udp_port">8443</param>
         </hardware>
         <gpio name="status_light">
@@ -178,50 +178,50 @@
           <command_interface name="state" />
         </gpio>
       </ros2_control>
-      <ros2_control name="battery_management" type="sensor">
-        <hardware>
-          <plugin>urc_hw/BatteryManagement</plugin>
-          <param name="udp_address">127.0.0.1</param>
-          <param name="udp_port">5000</param>
-          <param name="udp_self_address">127.0.0.1</param>
-          <param name="udp_self_port">7000</param>
-        </hardware>
-        <sensor name="battery_management">
-          <state_interface name="main_voltage" />
-          <state_interface name="charge_percentage" />
-          <state_interface name="discharge_current" />
-          <state_interface name="temperature" />
-          <state_interface name="cell1_voltage" />
-          <state_interface name="cell2_voltage" />
-          <state_interface name="cell3_voltage" />
-          <state_interface name="cell4_voltage" />
-          <state_interface name="cell5_voltage" />
-          <state_interface name="cell6_voltage" />
-          <state_interface name="cell7_voltage" />
-          <state_interface name="cell8_voltage" />
-        </sensor>
-      </ros2_control>
-      <ros2_control name="imu" type="sensor">
-        <hardware>
-          <plugin>urc_hw/IMU</plugin>
-          <param name="udp_address">127.0.0.1</param>
-          <param name="udp_port">5000</param>
-          <param name="udp_self_address">127.0.0.1</param>
-          <param name="udp_self_port">7000</param>
-        </hardware>
-        <sensor name="imu_sensor">
-          <state_interface name="orientation.x" />
-          <state_interface name="orientation.y" />
-          <state_interface name="orientation.z" />
-          <state_interface name="orientation.w" />
-          <state_interface name="linear_acceleration.x" />
-          <state_interface name="linear_acceleration.y" />
-          <state_interface name="linear_acceleration.z" />
-          <state_interface name="angular_velocity.x" />
-          <state_interface name="angular_velocity.y" />
-          <state_interface name="angular_velocity.z" />
-        </sensor>
-      </ros2_control>
+      <!-- <ros2_control name="battery_management" type="sensor"> -->
+      <!--   <hardware> -->
+      <!--     <plugin>urc_hw/BatteryManagement</plugin> -->
+      <!--     <param name="udp_address">127.0.0.1</param> -->
+      <!--     <param name="udp_port">5000</param> -->
+      <!--     <param name="udp_self_address">127.0.0.1</param> -->
+      <!--     <param name="udp_self_port">7000</param> -->
+      <!--   </hardware> -->
+      <!--   <sensor name="battery_management"> -->
+      <!--     <state_interface name="main_voltage" /> -->
+      <!--     <state_interface name="charge_percentage" /> -->
+      <!--     <state_interface name="discharge_current" /> -->
+      <!--     <state_interface name="temperature" /> -->
+      <!--     <state_interface name="cell1_voltage" /> -->
+      <!--     <state_interface name="cell2_voltage" /> -->
+      <!--     <state_interface name="cell3_voltage" /> -->
+      <!--     <state_interface name="cell4_voltage" /> -->
+      <!--     <state_interface name="cell5_voltage" /> -->
+      <!--     <state_interface name="cell6_voltage" /> -->
+      <!--     <state_interface name="cell7_voltage" /> -->
+      <!--     <state_interface name="cell8_voltage" /> -->
+      <!--   </sensor> -->
+      <!-- </ros2_control> -->
+      <!-- <ros2_control name="imu" type="sensor"> -->
+      <!--   <hardware> -->
+      <!--     <plugin>urc_hw/IMU</plugin> -->
+      <!--     <param name="udp_address">127.0.0.1</param> -->
+      <!--     <param name="udp_port">5000</param> -->
+      <!--     <param name="udp_self_address">127.0.0.1</param> -->
+      <!--     <param name="udp_self_port">7000</param> -->
+      <!--   </hardware> -->
+      <!--   <sensor name="imu_sensor"> -->
+      <!--     <state_interface name="orientation.x" /> -->
+      <!--     <state_interface name="orientation.y" /> -->
+      <!--     <state_interface name="orientation.z" /> -->
+      <!--     <state_interface name="orientation.w" /> -->
+      <!--     <state_interface name="linear_acceleration.x" /> -->
+      <!--     <state_interface name="linear_acceleration.y" /> -->
+      <!--     <state_interface name="linear_acceleration.z" /> -->
+      <!--     <state_interface name="angular_velocity.x" /> -->
+      <!--     <state_interface name="angular_velocity.y" /> -->
+      <!--     <state_interface name="angular_velocity.z" /> -->
+      <!--   </sensor> -->
+      <!-- </ros2_control> -->
     </xacro:if>
   </xacro:macro>
 </robot>
