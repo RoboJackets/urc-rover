@@ -133,8 +133,8 @@ RoverDrivetrain::write(const rclcpp::Time &time,
   pb_ostream_t stream = pb_ostream_from_buffer(buffer, sizeof(buffer));
 
   SetpointMessage setpoint;
-  setpoint.leftSetpoint = 1 * ENCODER_CPR * -1;
-  setpoint.rightSetpoint = 1 * ENCODER_CPR * -1;
+  setpoint.leftSetpoint = velocity_rps_commands[0] * ENCODER_CPR * -1;
+  setpoint.rightSetpoint = velocity_rps_commands[1] * ENCODER_CPR * -1;
   message.messageType.setpointMessage = setpoint;
 
   RCLCPP_INFO(rclcpp::get_logger(hardware_interface_name), "%d",
