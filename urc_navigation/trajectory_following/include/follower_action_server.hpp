@@ -53,11 +53,18 @@ private:
    */
   void handleCostmap(const nav_msgs::msg::OccupancyGrid::SharedPtr msg);
 
+  /**
+   * @brief Publish the plan to the /path topic for *visualization* purposes. The plan will be returned as a response to the service call.
+   * @param plan The plan to be published
+   */
+  void publishPlan(const nav_msgs::msg::Path & plan);
+
   int getCost(const nav_msgs::msg::OccupancyGrid & costmap, double x, double y);
 
   nav_msgs::msg::OccupancyGrid current_costmap_;
   rclcpp::Subscription<nav_msgs::msg::OccupancyGrid>::SharedPtr costmap_subscriber_;
   rclcpp::Publisher<geometry_msgs::msg::PointStamped>::SharedPtr carrot_pub_;
+  rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr plan_publisher_;
   rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub_;
   rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr cmd_vel_stamped_pub_;
   rclcpp_action::Server<urc_msgs::action::FollowPath>::SharedPtr follow_path_server_;

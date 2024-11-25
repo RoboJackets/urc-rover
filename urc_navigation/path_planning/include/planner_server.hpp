@@ -25,12 +25,6 @@ protected:
     std::shared_ptr<urc_msgs::srv::GeneratePlan::Response> response);
 
   /**
-   * @brief Publish the plan to the /path topic for *visualization* purposes. The plan will be returned as a response to the service call.
-   * @param plan The plan to be published
-   */
-  void publishPlan(const nav_msgs::msg::Path & plan);
-
-  /**
    * @brief Wait for the costmap to be available
    */
   void waitForCostmap();
@@ -43,7 +37,6 @@ protected:
 
   nav_msgs::msg::OccupancyGrid current_costmap_;
   rclcpp::Subscription<nav_msgs::msg::OccupancyGrid>::SharedPtr costmap_subscriber_;
-  rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr plan_publisher_;
   rclcpp::Service<urc_msgs::srv::GeneratePlan>::SharedPtr plan_service_;
 };
 } // namespace planner_server

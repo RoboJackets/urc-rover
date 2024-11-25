@@ -16,11 +16,6 @@ PlannerServer::PlannerServer(const rclcpp::NodeOptions & options)
     "plan",
     std::bind(&PlannerServer::generatePlan, this, std::placeholders::_1, std::placeholders::_2));
 
-  // Create the publisher
-  plan_publisher_ = create_publisher<nav_msgs::msg::Path>(
-    "/path",
-    rclcpp::SystemDefaultsQoS());
-
   // Setup the costmap
   costmap_subscriber_ = create_subscription<nav_msgs::msg::OccupancyGrid>(
     "/costmap",
@@ -71,19 +66,9 @@ void PlannerServer::generatePlan(
     response->error_code = urc_msgs::srv::GeneratePlan::Response::SUCCESS;
 
     RCLCPP_INFO(get_logger(), "Returning plan with %ld poses", plan.poses.size());
-
-    publishPlan(plan);
   } catch (const std::exception & e) {
     RCLCPP_ERROR(get_logger(), "Error generating plan: %s", e.what());
     response->error_code = urc_msgs::srv::GeneratePlan::Response::FAILURE;
-  }
-}
-
-void PlannerServer::publishPlan(const nav_msgs::msg::Path & plan)
-{
-  auto msg = std::make_unique<nav_msgs::msg::Path>(plan);
-  if (plan_publisher_->get_subscription_count() > 0) {
-    plan_publisher_->publish(std::move(msg));
   }
 }
 } // namespace planner_server
