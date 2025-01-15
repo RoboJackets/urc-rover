@@ -49,6 +49,12 @@ def generate_launch_description():
         get_package_share_directory("urc_bringup"), "config", "nmea_serial_driver.yaml"
     )
 
+    heartbeat_node = Node(
+        package="urc_bringup",
+        executable="urc_bringup_HeartbeatPublisher",
+        parameters=[{"heartbeatInterval": 1000}],
+    )
+
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
@@ -69,7 +75,7 @@ def generate_launch_description():
     load_joint_state_broadcaster = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["-p", controller_config_file_dir, "joint_state_broadcaster"]
+        arguments=["-p", controller_config_file_dir, "joint_state_broadcaster"],
     )
 
     load_drivetrain_controller = Node(
@@ -81,7 +87,7 @@ def generate_launch_description():
     load_status_light_controller = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["-p", controller_config_file_dir, "status_light_controller"]
+        arguments=["-p", controller_config_file_dir, "status_light_controller"],
     )
 
     twist_mux_node = Node(
@@ -93,17 +99,17 @@ def generate_launch_description():
     launch_gps = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
-                pkg_nmea_navsat_driver,
-                "launch", "nmea_serial_driver.launch.py"
+                pkg_nmea_navsat_driver, "launch", "nmea_serial_driver.launch.py"
             )
         )
     )
 
     launch_gps = Node(
-        package='nmea_navsat_driver',
-        executable='nmea_serial_driver',
-        output='screen',
-        parameters=[gps_config])
+        package="nmea_navsat_driver",
+        executable="nmea_serial_driver",
+        output="screen",
+        parameters=[gps_config],
+    )
 
     launch_vectornav = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -128,8 +134,7 @@ def generate_launch_description():
     )
 
     odom_frame_node = Node(
-        package="urc_tf", executable="urc_tf_WorldFrameBroadcaster",
-        output="screen"
+        package="urc_tf", executable="urc_tf_WorldFrameBroadcaster", output="screen"
     )
 
     return LaunchDescription(
@@ -154,5 +159,6 @@ def generate_launch_description():
             rosbridge_server_node,
             odom_frame_node,
             launch_vectornav,
+            heartbeat_node,
         ]
     )

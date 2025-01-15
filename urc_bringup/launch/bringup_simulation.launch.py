@@ -70,6 +70,13 @@ def generate_launch_description():
         ],
     )
 
+    rosbridge_server_node = Node(
+        package="rosbridge_server",
+        name="rosbridge_server",
+        executable="rosbridge_websocket.py",
+        parameters=[{"port": 9090}],
+    )
+
     load_robot_state_publisher = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
@@ -218,5 +225,6 @@ def generate_launch_description():
             load_robot_state_publisher,
             spawn_robot,
             map_to_odom_transform_node,
+            rosbridge_server_node,
         ]
     )
