@@ -7,7 +7,7 @@ from launch.actions import (
     RegisterEventHandler,
 )
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
-from launch.event_handlers import OnProcessExit, OnProcessStart
+from launch.event_handlers import OnProcessStart, OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
@@ -20,7 +20,7 @@ def generate_launch_description():
     pkg_urc_bringup = get_package_share_directory("urc_bringup")
     pkg_path_planning = get_package_share_directory("path_planning")
     pkg_trajectory_following = get_package_share_directory("trajectory_following")
-    pkg_urc_test = get_package_share_directory("urc_test")
+    pkg_urc_localization = get_package_share_directory("urc_localization")
 
     controller_config_file_dir = os.path.join(
         pkg_urc_bringup, "config", "ros2_control_walli.yaml"
@@ -124,12 +124,11 @@ def generate_launch_description():
         name="twist_mux",
     )
 
-    # ekf_launch = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource(
-    #         [FindPackageShare("urc_localization"),
-    #          "/launch/dual_ekf_navsat.launch.py"]
-    #     )
-    # )
+    sim_gps_handler_node = Node(
+        package="urc_platform",
+        executable="urc_platform_SimGpsHandler",
+        name="sim_gps_handler",
+    )
 
     bt_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -153,6 +152,12 @@ def generate_launch_description():
         )
     )
 
+    ekf_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(pkg_urc_localization, "launch", "ekf.launch.py")
+        )
+    )
+
     elevation_mapping_node = Node(
         package="urc_perception",
         executable="urc_perception_ElevationMapping",
@@ -168,22 +173,6 @@ def generate_launch_description():
         ],
     )
 
-    map_to_odom_transform_node = Node(
-        package="tf2_ros",
-        executable="static_transform_publisher",
-        arguments=["10", "10", "0", "0", "0", "0", "map", "odom"],
-    )
-
-    map_to_odom_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(
-                pkg_urc_test,
-                "launch",
-                "odom_to_map_pose.launch.py",
-            )
-        )
-    )
-
     return LaunchDescription(
         [
             RegisterEventHandler(
@@ -193,7 +182,6 @@ def generate_launch_description():
                         load_joint_state_broadcaster,
                         load_drivetrain_controller,
                         teleop_launch,
-                        map_to_odom_launch,
                     ],
                 )
             ),
@@ -215,8 +203,9 @@ def generate_launch_description():
             ),
             enable_color,
             gazebo,
+            sim_gps_handler_node,
             load_robot_state_publisher,
             spawn_robot,
-            map_to_odom_transform_node,
+            ekf_launch,
         ]
     )

@@ -38,24 +38,24 @@
             <noise type="gaussian">
               <mean>0.0</mean>
               <stddev>2e-4</stddev>
-              <bias_mean>0.0000075</bias_mean>
-              <bias_stddev>0.0000008</bias_stddev>
+              <bias_mean>0.0</bias_mean>
+              <bias_stddev>0.0</bias_stddev>
             </noise>
           </x>
           <y>
             <noise type="gaussian">
               <mean>0.0</mean>
               <stddev>2e-4</stddev>
-              <bias_mean>0.0000075</bias_mean>
-              <bias_stddev>0.0000008</bias_stddev>
+              <bias_mean>0.0</bias_mean>
+              <bias_stddev>0.0</bias_stddev>
             </noise>
           </y>
           <z>
             <noise type="gaussian">
               <mean>0.0</mean>
               <stddev>2e-4</stddev>
-              <bias_mean>0.0000075</bias_mean>
-              <bias_stddev>0.0000008</bias_stddev>
+              <bias_mean>0.0</bias_mean>
+              <bias_stddev>0.0</bias_stddev>
             </noise>
           </z>
         </angular_velocity>
@@ -64,24 +64,24 @@
             <noise type="gaussian">
               <mean>0.0</mean>
               <stddev>1.7e-2</stddev>
-              <bias_mean>0.1</bias_mean>
-              <bias_stddev>0.001</bias_stddev>
+              <bias_mean>0.0</bias_mean>
+              <bias_stddev>0.0</bias_stddev>
             </noise>
           </x>
           <y>
             <noise type="gaussian">
               <mean>0.0</mean>
               <stddev>1.7e-2</stddev>
-              <bias_mean>0.1</bias_mean>
-              <bias_stddev>0.001</bias_stddev>
+              <bias_mean>0.0</bias_mean>
+              <bias_stddev>0.0</bias_stddev>
             </noise>
           </y>
           <z>
             <noise type="gaussian">
               <mean>0.0</mean>
               <stddev>1.7e-2</stddev>
-              <bias_mean>0.1</bias_mean>
-              <bias_stddev>0.001</bias_stddev>
+              <bias_mean>0.0</bias_mean>
+              <bias_stddev>0.0</bias_stddev>
             </noise>
           </z>
         </linear_acceleration>
@@ -114,9 +114,9 @@
       <plugin filename="libgazebo_ros_gps_sensor.so" name="gps_plugin">
         <ros>
           <namespace>/gps</namespace>
-          <remapping>~/out:=data</remapping>
+          <remapping>~/out:=data_raw</remapping>
         </ros>
-        <frame_name>gps</frame_name>
+        <frame_name>map</frame_name>
       </plugin>
       <always_on>true</always_on>
       <updateRate>30</updateRate>

@@ -10,7 +10,7 @@
         <KeepRunningUntilFailure>
           <Inverter>
             <Sequence>
-              <UpdateCurrentPose topic_name="/map/pose"
+              <UpdateCurrentPose topic_name="/odometry/filtered_global"
                                  pose="{current_pose}"/>
               <LogInfo logger="{ros_log}"
                        message="Path Planning Looping..."/>
