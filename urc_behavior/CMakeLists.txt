@@ -1,9 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
-project(urc_bt)
+project(urc_behavior)
 
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
+include(../cmake/default_settings.cmake)
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
@@ -31,10 +29,8 @@ include_directories(
   include
 )
 
-add_library(
-  ${PROJECT_NAME} SHARED
+add_library(${PROJECT_NAME} SHARED
   src/bt_orchestrator.cpp
-  include/urc_bt/bt_orchestrator.hpp
 )
 
 ament_target_dependencies(${PROJECT_NAME}
@@ -44,8 +40,16 @@ ament_target_dependencies(${PROJECT_NAME}
 # Node registration
 rclcpp_components_register_node(
   ${PROJECT_NAME}
-  PLUGIN "behavior::BehaviorTreeOrchestrator"
-  EXECUTABLE ${PROJECT_NAME}_orchestrator
+  PLUGIN "urc_behavior::BehaviorTreeOrchestrator"
+  EXECUTABLE ${PROJECT_NAME}_BehaviorTreeOrchestrator
+)
+
+# Install launch files.
+install(
+  DIRECTORY
+  launch
+  strategies
+  DESTINATION share/${PROJECT_NAME}/
 )
 
 # Install library
@@ -67,7 +71,6 @@ if(BUILD_TESTING)
 endif()
 
 ament_export_include_directories(include)
-
 ament_export_libraries(${PROJECT_NAME})
 ament_export_dependencies(${dependencies})
 

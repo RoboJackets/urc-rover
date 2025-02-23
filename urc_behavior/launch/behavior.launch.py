@@ -4,11 +4,11 @@ from launch import LaunchDescription
 from launch.actions import SetEnvironmentVariable
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
+from launch_ros.substitutions import FindPackageShare
+from launch.substitutions import PathJoinSubstitution
 
 
 def generate_launch_description():
-    pkg_urc_bringup = get_package_share_directory("urc_bringup")
-
     normal_lib_names = ["liburc_bt_nodes.so"]
     ros_lib_names = [
         "libbt_call_generate_plan.so",
@@ -28,24 +28,24 @@ def generate_launch_description():
     ros_lib_paths = [
         os.path.join(node_lib_path_base, lib_name) for lib_name in ros_lib_names
     ]
+
     bt_file_name = "bt_test.xml"
-
-    enable_color = SetEnvironmentVariable(name="RCUTILS_COLORIZED_OUTPUT", value="1")
-
     orchestrator = Node(
-        package="urc_bt",
-        executable="urc_bt_orchestrator",
+        package="urc_behavior",
+        executable="urc_behavior_BehaviorTreeOrchestrator",
         parameters=[
             {
                 "normal_node_lib_dirs": normal_lib_paths,
                 "ros_node_lib_dirs": ros_lib_paths,
-                "tree_file_dir": os.path.join(
-                    pkg_urc_bringup, "strategies", bt_file_name
+                "tree_file_dir": PathJoinSubstitution(
+                    [FindPackageShare("urc_behavior"), "strategies", bt_file_name]
                 ),
-                "tick_rate": 1,
+                "tick_rate": 10,
             }
         ],
     )
+
+    enable_color = SetEnvironmentVariable(name="RCUTILS_COLORIZED_OUTPUT", value="1")
 
     return LaunchDescription(
         [

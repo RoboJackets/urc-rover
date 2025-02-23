@@ -22,6 +22,7 @@ def generate_launch_description():
     pkg_path_planning = get_package_share_directory("path_planning")
     pkg_trajectory_following = get_package_share_directory("trajectory_following")
     pkg_urc_test = get_package_share_directory("urc_test")
+    pkg_urc_behavior = get_package_share_directory("urc_behavior")
 
     controller_config_file_dir = os.path.join(
         pkg_urc_bringup, "config", "ros2_control_leo.yaml"
@@ -42,8 +43,8 @@ def generate_launch_description():
         ),
         launch_arguments={
             "use_sim_time": "true",
-            "world": world_path,
         }.items(),
+        # "world": world_path,
     )
 
     enable_color = SetEnvironmentVariable(name="RCUTILS_COLORIZED_OUTPUT", value="1")
@@ -112,16 +113,9 @@ def generate_launch_description():
         name="twist_mux",
     )
 
-    # ekf_launch = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource(
-    #         [FindPackageShare("urc_localization"),
-    #          "/launch/dual_ekf_navsat.launch.py"]
-    #     )
-    # )
-
-    bt_launch = IncludeLaunchDescription(
+    behavior_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(pkg_urc_bringup, "launch", "bt.launch.py")
+            os.path.join(pkg_urc_behavior, "launch", "behavior.launch.py")
         )
     )
 
@@ -157,6 +151,21 @@ def generate_launch_description():
         )
     )
 
+    elevation_mapping_node = Node(
+        package="urc_perception",
+        executable="urc_perception_ElevationMapping",
+        output="screen",
+        parameters=[
+            PathJoinSubstitution(
+                [
+                    FindPackageShare("urc_perception"),
+                    "config",
+                    "mapping_params.yaml",
+                ]
+            )
+        ],
+    )
+
     return LaunchDescription(
         [
             RegisterEventHandler(
@@ -167,6 +176,7 @@ def generate_launch_description():
                         load_drivetrain_controller,
                         teleop_launch,
                         map_to_odom_launch,
+                        elevation_mapping_node,
                     ],
                 )
             ),
@@ -176,21 +186,21 @@ def generate_launch_description():
                     on_exit=[twist_mux_node],
                 )
             ),
-            # RegisterEventHandler(
-            #     event_handler=OnProcessStart(
-            #         target_action=elevation_mapping_node,
-            #         on_start=[
-            #             path_planning_launch,
-            #             trajectory_following_launch,
-            #             bt_launch,
-            #         ],
-            #     )
-            # ),
+            RegisterEventHandler(
+                event_handler=OnProcessStart(
+                    target_action=elevation_mapping_node,
+                    on_start=[
+                        path_planning_launch,
+                        trajectory_following_launch,
+                        behavior_launch,
+                    ],
+                )
+            ),
             enable_color,
             gazebo,
             load_robot_state_publisher,
             spawn_robot,
             map_to_odom_transform_node,
-            # rosbridge_server_node,
+            rosbridge_server_node,
         ]
     )

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="4">
+  <BehaviorTree ID="test">
+    <RunOnce then_skip="true">
+      <Sequence>
+        <Delay delay_msec="1000">
+          <LogInfo logger="{ros_log}"
+            message="Trying to Plan Path..." />
+        </Delay>
+        <KeepRunningUntilFailure>
+          <Inverter>
+            <Sequence>
+              <UpdateCurrentPose topic_name="/map/pose"
+                pose="{current_pose}" />
+              <LogInfo logger="{ros_log}"
+                message="Path Planning Looping..." />
+              <CallGeneratePlan start_pose="{current_pose}"
+                goal_pose="15,15,2"
+                path="{generated_path}"
+                service_name="/plan" />
+              <LogInfo logger="{ros_log}"
+                message="Path Planning Successful!" />
+              <FollowPath path="{generated_path}"
+                action_name="/follow_path" />
+            </Sequence>
+          </Inverter>
+        </KeepRunningUntilFailure>
+      </Sequence>
+    </RunOnce>
+  </BehaviorTree>
+
+  <!-- Description of Node Models (used by Groot) -->
+  <TreeNodesModel>
+    <Action ID="CallGeneratePlan"
+      editable="true">
+      <input_port name="start_pose" />
+      <input_port name="goal_pose" />
+      <output_port name="path" />
+      <input_port name="service_name" />
+    </Action>
+    <Action ID="FollowPath"
+      editable="true">
+      <input_port name="path" />
+      <input_port name="action_name" />
+    </Action>
+    <Action ID="LogInfo"
+      editable="true">
+      <input_port name="logger"
+        default="&quot;urc_bt&quot;">Logger to use.</input_port>
+      <input_port name="message"
+        default="&quot;Replace this with the true message.&quot;">Message to log.</input_port>
+    </Action>
+    <Action ID="UpdateCurrentPose"
+      editable="true">
+      <input_port name="topic_name" />
+      <output_port name="pose" />
+    </Action>
+  </TreeNodesModel>
+
+</root>

@@ -43,8 +43,6 @@ install(
   DIRECTORY
   launch
   config
-  rviz
-  strategies
   DESTINATION share/${PROJECT_NAME}/
 )
 

@@ -467,7 +467,7 @@
 
 
     <!-- lidar-->
-    <link name="lidar_link">
+    <!-- <link name="lidar_link">
       <inertial>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <mass value="0.7" />
@@ -531,7 +531,7 @@
           <frame_name>lidar_link</frame_name>
         </plugin>
       </sensor>
-    </gazebo>
+    </gazebo> -->
 
     <!-- camera -->
     <gazebo reference="${link_prefix}camera_frame">
