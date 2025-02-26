@@ -5,6 +5,8 @@
 #include <sensor_msgs/msg/point_cloud2.hpp>
 #include <grid_map_ros/grid_map_ros.hpp>
 #include <filters/filter_chain.hpp>
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
 
 #include "tf2_ros/transform_listener.h"
 #include "tf2_ros/buffer.h"
@@ -22,6 +24,7 @@ namespace urc_perception
 
   private:
     void handlePointcloud(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
+    void filterSphere(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud, float radius);
 
     rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr pointcloud_subscriber_;
     rclcpp::Publisher<grid_map_msgs::msg::GridMap>::SharedPtr grid_map_publisher_;

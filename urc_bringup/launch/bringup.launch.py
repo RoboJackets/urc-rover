@@ -113,19 +113,33 @@ def generate_launch_description():
     )
 
     vectornav_node = Node(
-        package='vectornav', 
-        executable='vectornav',
-        output='screen',
-        parameters=[os.path.join(pkg_urc_bringup, 'config', 'vectornav_imu.yaml')],
-        remappings=[("/vectornav/imu", "/imu/data")]
+        package="vectornav",
+        executable="vectornav",
+        output="screen",
+        parameters=[os.path.join(pkg_urc_bringup, "config", "vectornav_imu.yaml")],
+        remappings=[("/vectornav/imu", "/imu/data")],
     )
-    
+
     vectornav_sensor_msg_node = Node(
-        package='vectornav', 
-        executable='vn_sensor_msgs',
-        output='screen',
-        parameters=[os.path.join(pkg_urc_bringup, 'config', 'vectornav_imu.yaml')],
-        remappings=[("/vectornav/imu", "/imu/data")]
+        package="vectornav",
+        executable="vn_sensor_msgs",
+        output="screen",
+        parameters=[os.path.join(pkg_urc_bringup, "config", "vectornav_imu.yaml")],
+        remappings=[("/vectornav/imu", "/imu/data")],
+    )
+
+    sick_scan_multiscan_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory("sick_scan_xd"),
+                "launch",
+                "sick_multiscan.launch.py",
+            )
+        ),
+        launch_arguments={
+            "publish_frame_id": "lidar_link",
+            "hostname": "192.168.1.10",
+        }.items(),
     )
 
     rosbridge_server_node = Node(
@@ -163,5 +177,6 @@ def generate_launch_description():
             vectornav_node,
             vectornav_sensor_msg_node,
             heartbeat_node,
+            sick_scan_multiscan_launch,
         ]
     )
